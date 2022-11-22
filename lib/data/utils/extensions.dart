@@ -164,11 +164,13 @@ Widget tableCell(String data, {bool isTitle = false}) =>
         child: Text(
           data,
           style: TextStyle(
-              fontSize: isTitle ? 14 : 12,
-              fontWeight: isTitle ?
-              FontWeight.bold :
-              FontWeight.normal
+            fontSize: isTitle ? 14 : 12,
+            fontWeight: isTitle ?
+            FontWeight.bold :
+            FontWeight.normal
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
         ),
       ),

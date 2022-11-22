@@ -50,13 +50,18 @@ class MenuWidget extends StatelessWidget {
           color: Colors.grey.shade900,
           borderRadius: BorderRadius.circular(16)
         ),
-        child: Center(
-          child: Text(
-            menu!.title!,
-            style: const TextStyle(
-              fontSize: 16
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: FittedBox(
+              child: Text(
+                menu!.title!,
+                style: const TextStyle(
+                  fontSize: 160
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
         ),
       ),

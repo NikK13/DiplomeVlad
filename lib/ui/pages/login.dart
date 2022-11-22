@@ -1,12 +1,9 @@
-import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vlad_diplome/data/utils/app.dart';
-import 'package:vlad_diplome/data/utils/localization.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/data/utils/styles.dart';
 import 'package:vlad_diplome/main.dart';
-import 'package:vlad_diplome/ui/widgets/bottom_dialog.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
@@ -68,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Text(
                           App.appName,
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 32,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 2
                           ),
@@ -82,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: InputField(
                                 controller: _surnameController,
                                 inputType: TextInputType.text,
-                                hint: AppLocalizations.of(context, 'surname'),
+                                hint: "Фамилия",
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -96,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: InputField(
                                 controller: _nameController,
                                 inputType: TextInputType.text,
-                                hint: AppLocalizations.of(context, 'name'),
+                                hint: "Имя",
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -110,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: InputField(
                                 controller: _secondNameController,
                                 inputType: TextInputType.text,
-                                hint: AppLocalizations.of(context, 'second_name'),
+                                hint: "Отчество",
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -121,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: InputField(
                             controller: _emailController,
                             inputType: TextInputType.emailAddress,
-                            hint: AppLocalizations.of(context, 'email'),
+                            hint: "Эл. почта",
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -130,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: InputField(
                             controller: _passwordController,
                             isPassword: true,
-                            hint: AppLocalizations.of(context, 'password'),
+                            hint: "Пароль",
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -143,8 +140,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: AppButton(
                                 fontSize: 18,
                                 text: !_isForSignUp ?
-                                AppLocalizations.of(context, 'login') :
-                                AppLocalizations.of(context, 'sign_up'),
+                                "Войти в аккаунт" :
+                                "Создать аккаунт",
                                 onPressed: () async{
                                   final email = _emailController.text.trim();
                                   final pass = _passwordController.text.trim();
@@ -180,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                     setState(() => _isInProgress = false);
                                   }
                                   else{
-                                    Fluttertoast.showToast(msg: AppLocalizations.of(context, 'empty_fields'));
+                                    Fluttertoast.showToast(msg: "Заполните все поля");
                                   }
                                 },
                               ),
@@ -202,8 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Text(
                             !_isForSignUp ?
-                            AppLocalizations.of(context, 'account_create') :
-                            AppLocalizations.of(context, 'account_exists')
+                            "Нет профиля? Создайте" :
+                            "Уже есть профиль. Войти"
                           )
                         ),
                       ],

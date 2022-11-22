@@ -1,4 +1,3 @@
-import 'package:vlad_diplome/data/utils/localization.dart';
 
 class ListItem{
   String title;
@@ -10,11 +9,6 @@ class ListItem{
 List<ListItem> get languages => List.from([
   ListItem("English", 'en'),
   ListItem("Русский", 'ru'),
-]);
-
-List<ListItem> listOfThemes(context) => List<ListItem>.from([
-  ListItem(AppLocalizations.of(context, 'theme_light'), 'light'),
-  ListItem(AppLocalizations.of(context, 'theme_dark'), 'dark')
 ]);
 
 List<ListItem> get destinations => List.from([

@@ -1,6 +1,5 @@
 import 'package:vlad_diplome/data/utils/app.dart';
 import 'package:vlad_diplome/data/utils/guards.dart';
-import 'package:vlad_diplome/data/utils/localization.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/data/utils/styles.dart';
 import 'package:vlad_diplome/ui/bloc/app_bloc.dart';
@@ -35,7 +34,6 @@ void main() async{
       projectId: "diplomevlad"
     )
   );
-  await AppLocalizations.loadLanguages();
   firebaseBloc = FirebaseBloc();
   appBloc = AppBloc();
   if(kIsWeb) setPathUrlStrategy();
@@ -61,14 +59,11 @@ class Application extends StatelessWidget {
     return Consumer<PreferenceProvider>(
       builder: (ctx, provider, child) {
         prefsProvider = provider;
-        return provider.locale != null ? MaterialApp.router(
+        return provider.currentTheme != null ? MaterialApp.router(
           key: globalKey,
           title: App.appName,
           debugShowCheckedModeBanner: false,
           showPerformanceOverlay: false,
-          locale: provider.preferences.locale,
-          localizationsDelegates: App.delegates,
-          supportedLocales: App.supportedLocales,
           themeMode: getThemeMode("dark"),
           theme: themeLight,
           darkTheme: themeDark,

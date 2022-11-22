@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:vlad_diplome/data/model/preferences.dart';
 import 'package:vlad_diplome/data/utils/constants.dart';
-import 'package:vlad_diplome/data/utils/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +8,6 @@ class PreferenceProvider extends ChangeNotifier {
   SharedPreferences? sp;
 
   String? currentTheme;
-  Locale? locale;
 
   PreferenceProvider() {
     _loadFromPrefs();
@@ -22,18 +20,6 @@ class PreferenceProvider extends ChangeNotifier {
   _loadFromPrefs() async {
     await _initPrefs();
     if (sp!.getString(keyThemeMode) == null) await sp!.setString(keyThemeMode, "light");
-    if (sp!.getString(keyLanguage) == null) {
-      switch (window.locale.languageCode) {
-        case 'en':
-        case 'ru':
-          locale = Locale(window.locale.languageCode, '');
-          break;
-        default:
-          locale = const Locale('ru', '');
-      }
-    } else {
-      locale = Locale(sp!.getString(keyLanguage)!, '');
-    }
     currentTheme = sp!.getString(keyThemeMode);
     notifyListeners();
   }
@@ -45,29 +31,7 @@ class PreferenceProvider extends ChangeNotifier {
         sp!.setString(key, value);
         currentTheme = sp!.getString(keyThemeMode);
         break;
-      case keyLanguage:
-        sp!.setString(key, value);
-        locale = Locale(sp!.getString(keyLanguage)!, '');
-        break;
     }
     notifyListeners();
-  }
-
-  Preferences get preferences => Preferences(
-    locale: locale,
-    theme: currentTheme,
-  );
-
-  String? getThemeTitle(BuildContext context) {
-    switch (sp!.getString(keyThemeMode)) {
-      case 'light':
-        return AppLocalizations.of(context, 'theme_light');
-      case 'dark':
-        return AppLocalizations.of(context, 'theme_dark');
-      case 'system':
-        return AppLocalizations.of(context, 'theme_system');
-      default:
-        return "";
-    }
   }
 }

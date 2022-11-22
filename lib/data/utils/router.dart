@@ -3,14 +3,15 @@ import 'package:vlad_diplome/data/utils/guards.dart';
 import 'package:vlad_diplome/ui/pages/home.dart';
 import 'package:vlad_diplome/ui/pages/login.dart';
 import 'package:vlad_diplome/ui/pages/employees.dart';
-import 'package:vlad_diplome/ui/pages/materials_details.dart';
+import 'package:vlad_diplome/ui/pages/materials.dart';
+import 'package:vlad_diplome/ui/pages/materials_accounting.dart';
 import 'package:vlad_diplome/ui/pages/materials_types.dart';
 
 const String loginPath = "/login";
 const String employeesPath = "/employees";
+const String materialsPath = "/materials";
 const String materialsTypesPath = "/materialsTypes";
-const String materialsListsPath = "/materials";
-const String settingsPagePath = "/settings";
+const String materialsAccountingPath = "/accounting";
 const String homePath = "";
 
 @AdaptiveAutoRouter(
@@ -37,8 +38,18 @@ const String homePath = "";
       guards: [CheckIfUserLoggedIn]
     ),
     AutoRoute(
-      page: MaterialsDetailsListPage,
-      path: materialsListsPath,
+      page: MaterialsAccountingPage,
+      path: materialsAccountingPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: MaterialsAccountingPage,
+      path: materialsAccountingPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: MaterialsListPage,
+      path: materialsPath,
       guards: [CheckIfUserLoggedIn]
     ),
     RedirectRoute(path: '*', redirectTo: "/")

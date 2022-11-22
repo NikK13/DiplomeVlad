@@ -1,12 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vlad_diplome/data/model/material_item.dart';
+import 'package:vlad_diplome/data/model/material_types.dart';
 import 'package:vlad_diplome/data/model/menu.dart';
 import 'package:vlad_diplome/data/utils/app.dart';
 import 'package:vlad_diplome/data/utils/extensions.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/data/utils/styles.dart';
 import 'package:vlad_diplome/main.dart';
+import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +37,8 @@ class _HomePageState extends State<HomePage> {
         }
       }
     });
+    appBloc.callMaterialsTypesStreams();
+    appBloc.callMaterialsStream();
     super.initState();
   }
 
@@ -41,27 +46,56 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 32, left: 24, right: 24
-          ),
-          child: Column(
-            children: [
-              Row(
+        child: Column(
+          children: [
+            Container(
+              height: 70,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(24),
+                  bottomLeft: Radius.circular(24)
+                )
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children:  [
                   const Padding(
-                    padding: EdgeInsets.only(left: 4),
+                    padding: EdgeInsets.only(left: 16),
                     child: Text(
                       App.appName,
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black
                       ),
                     ),
                   ),
                   Row(
                     children: [
+                      if(isAsAdministrator)
+                      IconButton(
+                        onPressed: (){
+                          context.router.push(const EmployeesPageRoute());
+                        },
+                        icon: const Icon(
+                          Icons.person_search_outlined,
+                          size: 32,
+                          color: appColor
+                        ),
+                        tooltip: "Сотрудники",
+                      ),
+                      /*IconButton(
+                        onPressed: (){
+
+                        },
+                        icon: const Icon(
+                          Icons.info_outlined,
+                          size: 32,
+                          color: appColor
+                        )
+                      ),*/
+                      const SizedBox(width: 2),
                       IconButton(
                         icon: const Icon(
                           Icons.logout,
@@ -73,53 +107,225 @@ class _HomePageState extends State<HomePage> {
                           loadingFuture = Future.value(true);
                           context.router.replaceAll([const LoginPageRoute()]);
                         },
+                        tooltip: "Выйти из профиля",
                       )
                     ],
                   )
                 ],
               ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: !_isLoading ?
-                isUserEnabled! ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 32),
-                    const Text(
-                      " Меню",
-                      style: TextStyle(
-                        fontSize: 22
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCountOnWidth(context),
-                          mainAxisSpacing: 8, crossAxisSpacing: 8,
-                          childAspectRatio: 1.5
-                        ),
-                        itemCount: SingleMenu.menuList(context).length,
-                        itemBuilder: (context, index){
-                          return MenuWidget(menu: SingleMenu.menuList(context)[index]);
-                        }
-                      ),
-                    ),
-                  ],
-                ) :  const Center(
-                  child: Text(
-                    "У вас нет прав\nПодождите пока вас рассмотрит администратор",
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: !_isLoading ?
+              isUserEnabled! ? const HomeContent()/*Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 32),
+                  const Text(
+                    " Меню",
                     style: TextStyle(
-                        fontSize: 14
+                      fontSize: 22
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ) : const LoadingView(),
-              )
-            ],
-          )
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCountOnWidth(context),
+                        mainAxisSpacing: 8, crossAxisSpacing: 8,
+                        childAspectRatio: 1.5
+                      ),
+                      itemCount: SingleMenu.menuList(context).length,
+                      itemBuilder: (context, index){
+                        return MenuWidget(menu: SingleMenu.menuList(context)[index]);
+                      }
+                    ),
+                  ),
+                ],
+              )*/ :  const Center(
+                child: Text(
+                  "У вас нет прав\nПодождите пока вас рассмотрит администратор",
+                  style: TextStyle(
+                      fontSize: 14
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ) : const LoadingView(),
+            )
+          ],
         ),
       ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: App.appPadding,
+        child: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width > 400 ?
+              400 : MediaQuery.of(context).size.width,
+              child: AppButton(
+                text: "Войти в учет",
+                onPressed: (){
+
+                },
+              ),
+            ),
+            const SizedBox(height: 48),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:  [
+                const Text(
+                  "Виды материалов",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    context.router.push(const MaterialsTypesListPageRoute());
+                  },
+                  child: const Text(
+                    "Посмотреть все",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: appColor,
+                      fontWeight: FontWeight.w300
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 8),
+            StreamBuilder(
+              stream: appBloc.materialsTypesStream,
+              builder: (context, AsyncSnapshot<List<MaterialsTypes>?> snapshot){
+                if(snapshot.hasData){
+                  if(snapshot.data!.isNotEmpty){
+                    return materialTypesTable(snapshot.data!);
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 32),
+                    child: Center(child: Text("Пока здесь пусто")),
+                  );
+                }
+                return const LoadingView();
+              },
+            ),
+            const SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Материалы",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    context.router.push(const MaterialsListPageRoute());
+                  },
+                  child: const Text(
+                    "Посмотреть все",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: appColor,
+                      fontWeight: FontWeight.w300
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 8),
+            StreamBuilder(
+              stream: appBloc.materialsStream,
+              builder: (context, AsyncSnapshot<List<MaterialItem>?> snapshot){
+                if(snapshot.hasData){
+                  if(snapshot.data!.isNotEmpty){
+                    return materialsTable(snapshot.data!);
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 32),
+                    child: Center(child: Text("Пока здесь пусто")),
+                  );
+                }
+                return const LoadingView();
+              },
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget materialTypesTable(List<MaterialsTypes> types, {int length = 3}) {
+    return Table(
+      border: TableBorder.all(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.grey.shade800,
+        width: 1.5
+      ),
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(6),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: types.getRange(0, types.length > length
+          ? length : types.length).toList().asMap().map((index, item){
+        return MapEntry(index, TableRow(children: [
+          tableCell((index + 1).toString(), isTitle: true),
+          tableCell(item.name!, isTitle: true),
+        ]));
+      }).values.toList()..insert(0, TableRow(children: [
+        tableCell("ID", isTitle: true),
+        tableCell("Наименование", isTitle: true)
+      ])),
+    );
+  }
+
+  Widget materialsTable(List<MaterialItem> types, {int length = 3}) {
+    return Table(
+      border: TableBorder.all(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.grey.shade800,
+        width: 1.5
+      ),
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+        2: FlexColumnWidth(3),
+        3: FlexColumnWidth(2),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: types.getRange(0, types.length > length
+          ? length : types.length).toList().asMap().map((index, item){
+        return MapEntry(index, TableRow(children: [
+          tableCell((index + 1).toString(), isTitle: true),
+          tableCell(item.name!),
+          tableCell(
+            appBloc.materialsTypesList.
+            firstWhere((element) => element.key == item.type!).name!,
+          ),
+          tableCell(item.vendor!),
+        ]));
+      }).values.toList()..insert(0, TableRow(children: [
+        tableCell("ID", isTitle: true),
+        tableCell("Название", isTitle: true),
+        tableCell("Вид материала", isTitle: true),
+        tableCell("Поставщик", isTitle: true),
+      ])),
     );
   }
 }

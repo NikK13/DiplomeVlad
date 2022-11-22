@@ -36,6 +36,8 @@ class DropdownPicker extends StatelessWidget {
         const SizedBox(height: 4),
         InputDecorator(
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
               borderSide: BorderSide(
@@ -75,10 +77,9 @@ class DropdownPicker extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_drop_down,
-                color: Theme.of(context).brightness == Brightness.dark ?
-                Colors.white : Colors.black,
+                color: Colors.black,
               ),
               selectedItemBuilder: (BuildContext ctx) {
                 return items!.map<Widget>((ListItem item) {
@@ -86,9 +87,8 @@ class DropdownPicker extends StatelessWidget {
                     value: item.value,
                     child: Text(
                       item.title,
-                      style: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.light ?
-                        Colors.black : Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w400
                       )

@@ -25,7 +25,7 @@ class _NewMaterialTypeDialogState extends State<NewMaterialTypeDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              hint: "Имя",
+              hint: "Название",
               controller: _nameController,
             ),
             const SizedBox(height: 16),

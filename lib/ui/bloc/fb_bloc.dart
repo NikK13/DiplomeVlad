@@ -2,8 +2,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vlad_diplome/data/utils/constants.dart';
-import 'package:vlad_diplome/data/utils/encrypt.dart';
-import 'package:vlad_diplome/data/utils/localization.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/bloc/bloc.dart';
@@ -63,7 +61,9 @@ class FirebaseBloc implements BaseBloc{
           await user.user!.sendEmailVerification();
           await createUserProfile(user.user!, name, surname, secondName, email, password);
           await fbAuth.signOut();
-          Fluttertoast.showToast(msg: AppLocalizations.of(context, 'sign_up_success'));
+          Fluttertoast.showToast(
+            msg: "Пользователь успешно создан. Для входа вам будет отправлено подтверждение на эл.почту"
+          );
           onSuccess();
         }
       } on FirebaseAuthException catch (e) {
@@ -72,19 +72,19 @@ class FirebaseBloc implements BaseBloc{
     }
     else{
       if(!emailValidated(email)){
-        Fluttertoast.showToast(msg: AppLocalizations.of(context, 'error_email'));
+        Fluttertoast.showToast(msg: "Эл.адрес должен содержать символ @ и состоять из 4 символов или более");
       }
       if(!nameValidated(name)){
-        Fluttertoast.showToast(msg: AppLocalizations.of(context, 'error_name'));
-      }
-      if(!nameValidated(surname)){
-        Fluttertoast.showToast(msg: AppLocalizations.of(context, 'error_surname'));
-      }
-      if(!nameValidated(secondName)){
-        Fluttertoast.showToast(msg: AppLocalizations.of(context, 'error_second_name'));
+        Fluttertoast.showToast(msg: "Имя должно содержать более одного символа");
       }
       if(!passwordValidated(email)){
-        Fluttertoast.showToast(msg: AppLocalizations.of(context, 'error_password'));
+        Fluttertoast.showToast(msg: "Пароль должен содержать более 5 символов");
+      }
+      if(!nameValidated(surname)){
+        Fluttertoast.showToast(msg: "Фамилия должна содержать более одного символа");
+      }
+      if(!nameValidated(secondName)){
+        Fluttertoast.showToast(msg: "Отчество должно содержать более одного символа");
       }
     }
   }
@@ -108,7 +108,7 @@ class FirebaseBloc implements BaseBloc{
             context.router.replaceAll([const HomePageRoute()]);
           }
           else{
-            Fluttertoast.showToast(msg: AppLocalizations.of(context, 'login_verify'));
+            Fluttertoast.showToast(msg: "Эл.адрес не подтвержден. Подтвердите перед входом в аккаунт");
             await fbAuth.signOut();
           }
         }
@@ -140,7 +140,7 @@ class FirebaseBloc implements BaseBloc{
           "second_name": secondName,
           "email": email,
           "is_activated": false,
-          "hash": Encryption.generateHash(p),
+          //"hash": Encryption.generateHash(p),
         });
       }
     });

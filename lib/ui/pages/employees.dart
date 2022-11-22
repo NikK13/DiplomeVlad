@@ -50,10 +50,10 @@ class _EmployeesPageState extends State<EmployeesPage> {
       ),
       columnWidths: const {
         0: FlexColumnWidth(1),
-        1: FlexColumnWidth(6),
+        1: FlexColumnWidth(4),
         2: FlexColumnWidth(2),
         3: FlexColumnWidth(2),
-        4: FlexColumnWidth(1),
+        4: FlexColumnWidth(1.25),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: em.asMap().map((index, employee){
