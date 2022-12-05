@@ -6,8 +6,12 @@ import 'package:vlad_diplome/ui/pages/employees.dart';
 import 'package:vlad_diplome/ui/pages/materials.dart';
 import 'package:vlad_diplome/ui/pages/materials_accounting.dart';
 import 'package:vlad_diplome/ui/pages/materials_types.dart';
+import 'package:vlad_diplome/ui/pages/stocks.dart';
+import 'package:vlad_diplome/ui/pages/vendors.dart';
 
 const String loginPath = "/login";
+const String stocksPath = "/stocks";
+const String vendorsPath = "/vendors";
 const String employeesPath = "/employees";
 const String materialsPath = "/materials";
 const String materialsTypesPath = "/materialsTypes";
@@ -30,6 +34,16 @@ const String homePath = "";
     AutoRoute(
       page: EmployeesPage,
       path: employeesPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: StocksListPage,
+      path: stocksPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: VendorsListPage,
+      path: vendorsPath,
       guards: [CheckIfUserLoggedIn]
     ),
     AutoRoute(

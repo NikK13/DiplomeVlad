@@ -83,7 +83,8 @@ class MaterialsListPage extends StatelessWidget {
             appBloc.materialsTypesList.
             firstWhere((element) => element.key == item.type!).name!,
           ),
-          tableCell(item.vendor!),
+          tableCell(appBloc.vendorsList.firstWhere((element)
+          => element.key == item.vendor!).name!),
           tableCell(item.allCount!.toString()),
           tableCell(item.pricePerItem.toString()),
         ]));

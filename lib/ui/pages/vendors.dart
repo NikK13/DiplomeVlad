@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:vlad_diplome/data/model/material_types.dart';
+import 'package:vlad_diplome/data/model/vendor.dart';
 import 'package:vlad_diplome/data/utils/extensions.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/dialogs/new_material_type_dialog.dart';
+import 'package:vlad_diplome/ui/dialogs/new_vendor_dialog.dart';
 import 'package:vlad_diplome/ui/widgets/apppage.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
 
-class MaterialsTypesListPage extends StatefulWidget {
-  const MaterialsTypesListPage({Key? key}) : super(key: key);
+class VendorsListPage extends StatefulWidget {
+  const VendorsListPage({Key? key}) : super(key: key);
 
   @override
-  State<MaterialsTypesListPage> createState() => _MaterialsTypesListPageState();
+  State<VendorsListPage> createState() => _VendorsListPageState();
 }
 
-class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
+class _VendorsListPageState extends State<VendorsListPage> {
   @override
   void initState() {
-    appBloc.callMaterialsTypesStreams();
+    appBloc.callVendorsStreams();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: "Виды материалов",
+      title: "Поставщики",
       child: StreamBuilder(
-        stream: appBloc.materialsTypesStream,
-        builder: (context, AsyncSnapshot<List<MaterialsTypes>?> snapshot){
+        stream: appBloc.vendorsStream,
+        builder: (context, AsyncSnapshot<List<VendorItem>?> snapshot){
           if(snapshot.hasData){
             if(snapshot.data!.isNotEmpty){
               return Column(
@@ -38,7 +39,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
                     child: AppButton(
                       text: "Добавить",
                       onPressed: (){
-                        showCustomDialog(context, const NewMaterialTypeDialog());
+                        showCustomDialog(context, const NewVendorDialog());
                       }
                     ),
                   ),
@@ -55,7 +56,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
                   child: AppButton(
                     text: "Добавить",
                     onPressed: (){
-                      showCustomDialog(context, const NewMaterialTypeDialog());
+                      showCustomDialog(context, const NewVendorDialog());
                     }
                   ),
                 ),
@@ -70,7 +71,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
     );
   }
 
-  Widget childTable(List<MaterialsTypes> types) {
+  Widget childTable(List<VendorItem> items) {
     return Table(
       border: TableBorder.all(
         borderRadius: BorderRadius.circular(8),
@@ -83,11 +84,11 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
         //2: FlexColumnWidth(2),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: types.asMap().map((index, item){
+      children: items.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
           tableCell((index + 1).toString(), isTitle: true),
           tableCell(item.name!, isTitle: true),
-          /*IconButton(
+         /* IconButton(
             onPressed: () async{
               //await appBloc.deleteMaterialType(item.key!);
             },

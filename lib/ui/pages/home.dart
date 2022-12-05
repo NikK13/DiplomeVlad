@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vlad_diplome/data/model/material_item.dart';
 import 'package:vlad_diplome/data/model/material_types.dart';
 import 'package:vlad_diplome/data/model/menu.dart';
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     appBloc.callMaterialsTypesStreams();
+    appBloc.callVendorsStreams();
     appBloc.callMaterialsStream();
     super.initState();
   }
@@ -46,78 +48,184 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(24),
-                  bottomLeft: Radius.circular(24)
-                )
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children:  [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16),
-                    child: Text(
-                      App.appName,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  /*borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(24),
+                    bottomLeft: Radius.circular(24)
+                  )*/
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:  [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            App.appName,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            if(isAsAdministrator)
+                            IconButton(
+                              onPressed: (){
+                                context.router.push(const EmployeesPageRoute());
+                              },
+                              icon: const Icon(
+                                Icons.person_search_outlined,
+                                size: 32,
+                                color: appColor
+                              ),
+                              tooltip: "Сотрудники",
+                            ),
+                            /*IconButton(
+                              onPressed: (){
+
+                              },
+                              icon: const Icon(
+                                Icons.info_outlined,
+                                size: 32,
+                                color: appColor
+                              )
+                            ),*/
+                            const SizedBox(width: 2),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.logout,
+                                size: 32,
+                              ),
+                              color: appColor,
+                              onPressed: () async{
+                                await firebaseBloc.signOutUser();
+                                loadingFuture = Future.value(true);
+                                context.router.replaceAll([const LoginPageRoute()]);
+                              },
+                              tooltip: "Выйти из профиля",
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+
+                              },
+                              child: const Text(
+                                "Учет материалов",
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+                                context.router.push(const MaterialsTypesListPageRoute());
+                              },
+                              child: const Text(
+                                "Виды материалов",
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+                                if(appBloc.materialsTypesList.isNotEmpty &&
+                                appBloc.vendorsList.isNotEmpty){
+                                  context.router.push(const MaterialsListPageRoute());
+                                }
+                                else{
+                                  Fluttertoast.showToast(msg: "Для добавления материалов должен быть "
+                                      "добавлен хотя бы один поставщик и один вид материала");
+                                }
+                              },
+                              child: const Text(
+                                "Материалы",
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+                                context.router.push(const VendorsListPageRoute());
+                              },
+                              child: const Text(
+                                "Поставщики",
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+                                context.router.push(const StocksListPageRoute());
+                              },
+                              child: const Text(
+                                "Склады",
+                                style: TextStyle(
+                                  color: appColor,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      if(isAsAdministrator)
-                      IconButton(
-                        onPressed: (){
-                          context.router.push(const EmployeesPageRoute());
-                        },
-                        icon: const Icon(
-                          Icons.person_search_outlined,
-                          size: 32,
-                          color: appColor
-                        ),
-                        tooltip: "Сотрудники",
-                      ),
-                      /*IconButton(
-                        onPressed: (){
-
-                        },
-                        icon: const Icon(
-                          Icons.info_outlined,
-                          size: 32,
-                          color: appColor
-                        )
-                      ),*/
-                      const SizedBox(width: 2),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.logout,
-                          size: 32,
-                        ),
-                        color: appColor,
-                        onPressed: () async{
-                          await firebaseBloc.signOutUser();
-                          loadingFuture = Future.value(true);
-                          context.router.replaceAll([const LoginPageRoute()]);
-                        },
-                        tooltip: "Выйти из профиля",
-                      )
-                    ],
-                  )
-                ],
+                    const SizedBox(height: 16)
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: !_isLoading ?
-              isUserEnabled! ? const HomeContent()/*Column(
+              !_isLoading ?
+              isUserEnabled! ? const HomePageContent()/*Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 32),
@@ -146,18 +254,74 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   "У вас нет прав\nПодождите пока вас рассмотрит администратор",
                   style: TextStyle(
-                      fontSize: 14
+                    fontSize: 14
                   ),
                   textAlign: TextAlign.center,
                 ),
-              ) : const LoadingView(),
-            )
-          ],
+              ) : const LoadingView()
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+class HomePageContent extends StatelessWidget {
+  const HomePageContent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(
+          "assets/sklad.jpg",
+          fit: BoxFit.cover,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+        ),
+        Column(
+          children: const [
+            SizedBox(height: 16),
+            Text(
+              "Контакты:",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              "+375 29 121 21 21",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "+375 29 222 33 66",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              "2022 год",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            SizedBox(height: 16),
+          ],
+        )
+      ],
+    );
+  }
+}
+
 
 class HomeContent extends StatelessWidget {
   const HomeContent({Key? key}) : super(key: key);

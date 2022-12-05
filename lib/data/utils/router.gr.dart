@@ -11,108 +11,132 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i7;
-import 'package:flutter/material.dart' as _i8;
-import 'package:vlad_diplome/data/utils/guards.dart' as _i9;
+import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
+import 'package:vlad_diplome/data/utils/guards.dart' as _i11;
 import 'package:vlad_diplome/ui/pages/employees.dart' as _i3;
 import 'package:vlad_diplome/ui/pages/home.dart' as _i2;
 import 'package:vlad_diplome/ui/pages/login.dart' as _i1;
-import 'package:vlad_diplome/ui/pages/materials.dart' as _i6;
-import 'package:vlad_diplome/ui/pages/materials_accounting.dart' as _i5;
-import 'package:vlad_diplome/ui/pages/materials_types.dart' as _i4;
+import 'package:vlad_diplome/ui/pages/materials.dart' as _i8;
+import 'package:vlad_diplome/ui/pages/materials_accounting.dart' as _i7;
+import 'package:vlad_diplome/ui/pages/materials_types.dart' as _i6;
+import 'package:vlad_diplome/ui/pages/stocks.dart' as _i4;
+import 'package:vlad_diplome/ui/pages/vendors.dart' as _i5;
 
-class AppRouter extends _i7.RootStackRouter {
+class AppRouter extends _i9.RootStackRouter {
   AppRouter({
-    _i8.GlobalKey<_i8.NavigatorState>? navigatorKey,
+    _i10.GlobalKey<_i10.NavigatorState>? navigatorKey,
     required this.checkIfUserLoggedIn,
   }) : super(navigatorKey);
 
-  final _i9.CheckIfUserLoggedIn checkIfUserLoggedIn;
+  final _i11.CheckIfUserLoggedIn checkIfUserLoggedIn;
 
   @override
-  final Map<String, _i7.PageFactory> pagesMap = {
+  final Map<String, _i9.PageFactory> pagesMap = {
     LoginPageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
       );
     },
     HomePageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i2.HomePage(),
       );
     },
     EmployeesPageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i3.EmployeesPage(),
       );
     },
-    MaterialsTypesListPageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+    StocksListPageRoute.name: (routeData) {
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i4.MaterialsTypesListPage(),
+        child: const _i4.StocksListPage(),
+      );
+    },
+    VendorsListPageRoute.name: (routeData) {
+      return _i9.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.VendorsListPage(),
+      );
+    },
+    MaterialsTypesListPageRoute.name: (routeData) {
+      return _i9.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i6.MaterialsTypesListPage(),
       );
     },
     MaterialsAccountingPageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i5.MaterialsAccountingPage(),
+        child: const _i7.MaterialsAccountingPage(),
       );
     },
     MaterialsListPageRoute.name: (routeData) {
-      return _i7.AdaptivePage<dynamic>(
+      return _i9.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i6.MaterialsListPage(),
+        child: const _i8.MaterialsListPage(),
       );
     },
   };
 
   @override
-  List<_i7.RouteConfig> get routes => [
-        _i7.RouteConfig(
+  List<_i9.RouteConfig> get routes => [
+        _i9.RouteConfig(
           '/#redirect',
           path: '/',
           redirectTo: '/login',
           fullMatch: true,
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           LoginPageRoute.name,
           path: '/login',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           HomePageRoute.name,
           path: '',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           EmployeesPageRoute.name,
           path: '/employees',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
+          StocksListPageRoute.name,
+          path: '/stocks',
+          guards: [checkIfUserLoggedIn],
+        ),
+        _i9.RouteConfig(
+          VendorsListPageRoute.name,
+          path: '/vendors',
+          guards: [checkIfUserLoggedIn],
+        ),
+        _i9.RouteConfig(
           MaterialsTypesListPageRoute.name,
           path: '/materialsTypes',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           MaterialsAccountingPageRoute.name,
           path: '/accounting',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           MaterialsAccountingPageRoute.name,
           path: '/accounting',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           MaterialsListPageRoute.name,
           path: '/materials',
           guards: [checkIfUserLoggedIn],
         ),
-        _i7.RouteConfig(
+        _i9.RouteConfig(
           '*#redirect',
           path: '*',
           redirectTo: '/',
@@ -123,7 +147,7 @@ class AppRouter extends _i7.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginPageRoute extends _i7.PageRouteInfo<void> {
+class LoginPageRoute extends _i9.PageRouteInfo<void> {
   const LoginPageRoute()
       : super(
           LoginPageRoute.name,
@@ -135,7 +159,7 @@ class LoginPageRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomePage]
-class HomePageRoute extends _i7.PageRouteInfo<void> {
+class HomePageRoute extends _i9.PageRouteInfo<void> {
   const HomePageRoute()
       : super(
           HomePageRoute.name,
@@ -147,7 +171,7 @@ class HomePageRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.EmployeesPage]
-class EmployeesPageRoute extends _i7.PageRouteInfo<void> {
+class EmployeesPageRoute extends _i9.PageRouteInfo<void> {
   const EmployeesPageRoute()
       : super(
           EmployeesPageRoute.name,
@@ -158,8 +182,32 @@ class EmployeesPageRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.MaterialsTypesListPage]
-class MaterialsTypesListPageRoute extends _i7.PageRouteInfo<void> {
+/// [_i4.StocksListPage]
+class StocksListPageRoute extends _i9.PageRouteInfo<void> {
+  const StocksListPageRoute()
+      : super(
+          StocksListPageRoute.name,
+          path: '/stocks',
+        );
+
+  static const String name = 'StocksListPageRoute';
+}
+
+/// generated route for
+/// [_i5.VendorsListPage]
+class VendorsListPageRoute extends _i9.PageRouteInfo<void> {
+  const VendorsListPageRoute()
+      : super(
+          VendorsListPageRoute.name,
+          path: '/vendors',
+        );
+
+  static const String name = 'VendorsListPageRoute';
+}
+
+/// generated route for
+/// [_i6.MaterialsTypesListPage]
+class MaterialsTypesListPageRoute extends _i9.PageRouteInfo<void> {
   const MaterialsTypesListPageRoute()
       : super(
           MaterialsTypesListPageRoute.name,
@@ -170,8 +218,8 @@ class MaterialsTypesListPageRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.MaterialsAccountingPage]
-class MaterialsAccountingPageRoute extends _i7.PageRouteInfo<void> {
+/// [_i7.MaterialsAccountingPage]
+class MaterialsAccountingPageRoute extends _i9.PageRouteInfo<void> {
   const MaterialsAccountingPageRoute()
       : super(
           MaterialsAccountingPageRoute.name,
@@ -182,8 +230,8 @@ class MaterialsAccountingPageRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i6.MaterialsListPage]
-class MaterialsListPageRoute extends _i7.PageRouteInfo<void> {
+/// [_i8.MaterialsListPage]
+class MaterialsListPageRoute extends _i9.PageRouteInfo<void> {
   const MaterialsListPageRoute()
       : super(
           MaterialsListPageRoute.name,

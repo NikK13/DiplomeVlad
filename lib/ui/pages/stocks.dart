@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:vlad_diplome/data/model/material_types.dart';
+import 'package:vlad_diplome/data/model/stock.dart';
 import 'package:vlad_diplome/data/utils/extensions.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/dialogs/new_material_type_dialog.dart';
+import 'package:vlad_diplome/ui/dialogs/new_stock_dialog.dart';
 import 'package:vlad_diplome/ui/widgets/apppage.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
 
-class MaterialsTypesListPage extends StatefulWidget {
-  const MaterialsTypesListPage({Key? key}) : super(key: key);
+class StocksListPage extends StatefulWidget {
+  const StocksListPage({Key? key}) : super(key: key);
 
   @override
-  State<MaterialsTypesListPage> createState() => _MaterialsTypesListPageState();
+  State<StocksListPage> createState() => _StocksListPageState();
 }
 
-class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
+class _StocksListPageState extends State<StocksListPage> {
   @override
   void initState() {
-    appBloc.callMaterialsTypesStreams();
+    appBloc.callStocksStreams();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: "Виды материалов",
+      title: "Склады",
       child: StreamBuilder(
-        stream: appBloc.materialsTypesStream,
-        builder: (context, AsyncSnapshot<List<MaterialsTypes>?> snapshot){
+        stream: appBloc.stocksStream,
+        builder: (context, AsyncSnapshot<List<StockItem>?> snapshot){
           if(snapshot.hasData){
             if(snapshot.data!.isNotEmpty){
               return Column(
@@ -38,7 +40,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
                     child: AppButton(
                       text: "Добавить",
                       onPressed: (){
-                        showCustomDialog(context, const NewMaterialTypeDialog());
+                        showCustomDialog(context, const NewStockDialog());
                       }
                     ),
                   ),
@@ -55,7 +57,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
                   child: AppButton(
                     text: "Добавить",
                     onPressed: (){
-                      showCustomDialog(context, const NewMaterialTypeDialog());
+                      showCustomDialog(context, const NewStockDialog());
                     }
                   ),
                 ),
@@ -70,7 +72,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
     );
   }
 
-  Widget childTable(List<MaterialsTypes> types) {
+  Widget childTable(List<StockItem> items) {
     return Table(
       border: TableBorder.all(
         borderRadius: BorderRadius.circular(8),
@@ -79,14 +81,16 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
       ),
       columnWidths: const {
         0: FlexColumnWidth(2),
-        1: FlexColumnWidth(6),
-        //2: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+        2: FlexColumnWidth(6),
+        //4: FlexColumnWidth(1.5),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: types.asMap().map((index, item){
+      children: items.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
           tableCell((index + 1).toString(), isTitle: true),
           tableCell(item.name!, isTitle: true),
+          tableCell(item.address!, isTitle: true),
           /*IconButton(
             onPressed: () async{
               //await appBloc.deleteMaterialType(item.key!);
@@ -97,6 +101,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
       }).values.toList()..insert(0, TableRow(children: [
         tableCell("ID", isTitle: true),
         tableCell("Наименование", isTitle: true),
+        tableCell("Адрес", isTitle: true),
         //tableCell("", isTitle: true),
       ])),
     );

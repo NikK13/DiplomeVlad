@@ -16,10 +16,11 @@ class NewMaterialDialog extends StatefulWidget {
 
 class _NewMaterialDialogState extends State<NewMaterialDialog> {
   late ListItem materialType;
+  late ListItem vendorItem;
   List<ListItem> listItem = [];
+  List<ListItem> listVendors = [];
 
   final _nameController = TextEditingController();
-  final _vendorController = TextEditingController();
   final _descController = TextEditingController();
   final _countController = TextEditingController();
   final _priceController = TextEditingController();
@@ -29,7 +30,11 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
     for(var item in appBloc.materialsTypesList){
       listItem.add(ListItem(item.name!, item.key!));
     }
+    for(var item in appBloc.vendorsList){
+      listVendors.add(ListItem(item.name!, item.key!));
+    }
     materialType = listItem.first;
+    vendorItem = listVendors.first;
     super.initState();
   }
 
@@ -63,9 +68,14 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: InputField(
-                    hint: "Поставщик",
-                    controller: _vendorController,
+                  child:  DropdownPicker(
+                    title: "Поставщик",
+                    myValue: vendorItem.value,
+                    items: listVendors,
+                    darkColor: const Color(0xFF242424),
+                    onChange: (newVal){
+                      setState(() => vendorItem = listVendors.firstWhere((element) => element.value == newVal));
+                    },
                   ),
                 ),
               ],
@@ -100,15 +110,13 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
               onPressed: () async{
                 final name = _nameController.text.trim();
                 final desc = _descController.text.trim();
-                final vendor = _vendorController.text.trim();
                 final price = _priceController.text.trim();
                 final count = _countController.text.trim();
-                if(name.isNotEmpty && vendor.isNotEmpty &&
-                  price.isNotEmpty && count.isNotEmpty){
+                if(name.isNotEmpty && price.isNotEmpty && count.isNotEmpty){
                   Navigator.pop(context);
                   final item = MaterialItem(
                     name: name,
-                    vendor: vendor,
+                    vendor: vendorItem.value,
                     desc: desc,
                     type: materialType.value,
                     allCount: int.tryParse(count) ?? 0,
@@ -134,7 +142,6 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
     _priceController.dispose();
     _nameController.dispose();
     _countController.dispose();
-    _vendorController.dispose();
     _descController.dispose();
     super.dispose();
   }
