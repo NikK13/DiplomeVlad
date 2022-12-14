@@ -140,8 +140,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: AppButton(
                                 fontSize: 18,
                                 text: !_isForSignUp ?
-                                "Войти в аккаунт" :
-                                "Создать аккаунт",
+                                "Войти" :
+                                "Создать",
                                 onPressed: () async{
                                   final email = _emailController.text.trim();
                                   final pass = _passwordController.text.trim();
@@ -199,8 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Text(
                             !_isForSignUp ?
-                            "Нет профиля? Создайте" :
-                            "Уже есть профиль. Войти"
+                            "Еще нет аккаунта? Создайте" :
+                            "Уже есть. Войти в аккаунт"
                           )
                         ),
                       ],

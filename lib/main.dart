@@ -64,7 +64,7 @@ class Application extends StatelessWidget {
           title: App.appName,
           debugShowCheckedModeBanner: false,
           showPerformanceOverlay: false,
-          themeMode: getThemeMode("dark"),
+          themeMode: getThemeMode("light"),
           theme: themeLight,
           darkTheme: themeDark,
           routerDelegate: _appRouter.delegate(),

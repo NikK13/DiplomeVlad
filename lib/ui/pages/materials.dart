@@ -7,18 +7,25 @@ import 'package:vlad_diplome/ui/widgets/apppage.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
 
-class MaterialsListPage extends StatelessWidget {
+class MaterialsListPage extends StatefulWidget {
   const MaterialsListPage({Key? key}) : super(key: key);
 
   @override
+  State<MaterialsListPage> createState() => _MaterialsListPageState();
+}
+
+class _MaterialsListPageState extends State<MaterialsListPage> {
+
+  @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: "Материалы",
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
       child: StreamBuilder(
         stream: appBloc.materialsStream,
         builder: (context, AsyncSnapshot<List<MaterialItem>?> snapshot){
           if(snapshot.hasData){
             if(snapshot.data!.isNotEmpty){
+              debugPrint(snapshot.data.toString());
               return Column(
                 children: [
                   SizedBox(
@@ -89,11 +96,11 @@ class MaterialsListPage extends StatelessWidget {
           tableCell(item.pricePerItem.toString()),
         ]));
       }).values.toList()..insert(0, TableRow(children: [
-        tableCell("ID", isTitle: true),
+        tableCell("", isTitle: true),
         tableCell("Название", isTitle: true),
         tableCell("Вид материала", isTitle: true),
         tableCell("Поставщик", isTitle: true),
-        tableCell("Ед.осталось", isTitle: true),
+        tableCell("Единиц", isTitle: true),
         tableCell("Цена за ед.", isTitle: true),
       ])),
     );

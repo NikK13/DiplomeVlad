@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vlad_diplome/data/model/material_types.dart';
 import 'package:vlad_diplome/data/model/stock.dart';
 import 'package:vlad_diplome/data/utils/extensions.dart';
 import 'package:vlad_diplome/main.dart';
-import 'package:vlad_diplome/ui/dialogs/new_material_type_dialog.dart';
 import 'package:vlad_diplome/ui/dialogs/new_stock_dialog.dart';
 import 'package:vlad_diplome/ui/widgets/apppage.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
@@ -17,16 +15,11 @@ class StocksListPage extends StatefulWidget {
 }
 
 class _StocksListPageState extends State<StocksListPage> {
-  @override
-  void initState() {
-    appBloc.callStocksStreams();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: "Склады",
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
       child: StreamBuilder(
         stream: appBloc.stocksStream,
         builder: (context, AsyncSnapshot<List<StockItem>?> snapshot){
@@ -88,9 +81,9 @@ class _StocksListPageState extends State<StocksListPage> {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: items.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
-          tableCell((index + 1).toString(), isTitle: true),
-          tableCell(item.name!, isTitle: true),
-          tableCell(item.address!, isTitle: true),
+          tableCell((index + 1).toString(), isTitle: false),
+          tableCell(item.name!, isTitle: false),
+          tableCell(item.address!, isTitle: false),
           /*IconButton(
             onPressed: () async{
               //await appBloc.deleteMaterialType(item.key!);
@@ -99,7 +92,7 @@ class _StocksListPageState extends State<StocksListPage> {
           ),*/
         ]));
       }).values.toList()..insert(0, TableRow(children: [
-        tableCell("ID", isTitle: true),
+        tableCell("", isTitle: true),
         tableCell("Наименование", isTitle: true),
         tableCell("Адрес", isTitle: true),
         //tableCell("", isTitle: true),

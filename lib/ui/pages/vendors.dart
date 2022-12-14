@@ -17,15 +17,9 @@ class VendorsListPage extends StatefulWidget {
 
 class _VendorsListPageState extends State<VendorsListPage> {
   @override
-  void initState() {
-    appBloc.callVendorsStreams();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: "Поставщики",
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
       child: StreamBuilder(
         stream: appBloc.vendorsStream,
         builder: (context, AsyncSnapshot<List<VendorItem>?> snapshot){
@@ -86,8 +80,8 @@ class _VendorsListPageState extends State<VendorsListPage> {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: items.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
-          tableCell((index + 1).toString(), isTitle: true),
-          tableCell(item.name!, isTitle: true),
+          tableCell((index + 1).toString(), isTitle: false),
+          tableCell(item.name!, isTitle: false),
          /* IconButton(
             onPressed: () async{
               //await appBloc.deleteMaterialType(item.key!);
@@ -96,7 +90,7 @@ class _VendorsListPageState extends State<VendorsListPage> {
           ),*/
         ]));
       }).values.toList()..insert(0, TableRow(children: [
-        tableCell("ID", isTitle: true),
+        tableCell("", isTitle: true),
         tableCell("Наименование", isTitle: true),
         //tableCell("", isTitle: true),
       ])),

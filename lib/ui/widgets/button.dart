@@ -14,7 +14,7 @@ class AppButton extends StatelessWidget {
     this.fontSize = 20,
     @required this.onPressed,
     this.onLongPress,
-    this.borderRadius = 50
+    this.borderRadius = 4
   }) : super(key: key);
 
   @override

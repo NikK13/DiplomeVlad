@@ -51,8 +51,6 @@ class _InputFieldState extends State<InputField> {
             fontSize: 16,
             color: Colors.black
           ),
-          filled: true,
-          fillColor: Colors.white,
           suffixIcon: widget.isPassword ? IconButton(
             icon: Icon(
               _passwordIsVisible
@@ -81,9 +79,9 @@ class _InputFieldState extends State<InputField> {
   }
 
   final border = const OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderRadius: BorderRadius.all(Radius.circular(4)),
     borderSide: BorderSide(
-      color: Colors.white,
+      color: Colors.black,
       width: 0.5
     )
   );

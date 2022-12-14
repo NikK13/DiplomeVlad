@@ -23,8 +23,8 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: "Виды материалов",
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
       child: StreamBuilder(
         stream: appBloc.materialsTypesStream,
         builder: (context, AsyncSnapshot<List<MaterialsTypes>?> snapshot){
@@ -85,8 +85,8 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: types.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
-          tableCell((index + 1).toString(), isTitle: true),
-          tableCell(item.name!, isTitle: true),
+          tableCell((index + 1).toString(), isTitle: false),
+          tableCell(item.name!, isTitle: false),
           /*IconButton(
             onPressed: () async{
               //await appBloc.deleteMaterialType(item.key!);
@@ -95,7 +95,7 @@ class _MaterialsTypesListPageState extends State<MaterialsTypesListPage> {
           ),*/
         ]));
       }).values.toList()..insert(0, TableRow(children: [
-        tableCell("ID", isTitle: true),
+        tableCell("", isTitle: true),
         tableCell("Наименование", isTitle: true),
         //tableCell("", isTitle: true),
       ])),
