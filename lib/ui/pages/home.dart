@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vlad_diplome/data/utils/app.dart';
+import 'package:vlad_diplome/data/utils/extensions.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/data/utils/styles.dart';
 import 'package:vlad_diplome/main.dart';
+import 'package:vlad_diplome/ui/dialogs/info_dialog.dart';
 import 'package:vlad_diplome/ui/pages/materials.dart';
 import 'package:vlad_diplome/ui/pages/materials_accounting.dart';
 import 'package:vlad_diplome/ui/pages/materials_types.dart';
@@ -95,16 +97,16 @@ class _HomePageState extends State<HomePage> {
                             ),
                             tooltip: "Сотрудники",
                           ),
-                          /*IconButton(
+                          IconButton(
                             onPressed: (){
-
+                              showCustomDialog(context, const InfoDialog());
                             },
                             icon: const Icon(
                               Icons.info_outlined,
                               size: 32,
                               color: appColor
                             )
-                          ),*/
+                          ),
                           const SizedBox(width: 2),
                           IconButton(
                             icon: const Icon(
@@ -211,6 +213,15 @@ class _HomePageState extends State<HomePage> {
             "добавлен хотя бы один поставщик и один вид материала");
           }
         }
+        else if(index == 1){
+          if(appBloc.materialsList.isNotEmpty){
+            setState(() => _selectedIndex = index);
+          }
+          else{
+            Fluttertoast.showToast(msg: "Для добавления в учет должен быть "
+            "добавлен хотя бы один материал");
+          }
+        }
         else{
           setState(() => _selectedIndex = index);
         }
@@ -259,6 +270,8 @@ class HomePageContent extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
+                  color: Colors.black.withOpacity(0.55),
+                  colorBlendMode: BlendMode.darken,
                 ),
               ),
               const Positioned.fill(
@@ -276,7 +289,7 @@ class HomePageContent extends StatelessWidget {
               )
             ],
           ),
-          Column(
+          /*Column(
             children: const [
               SizedBox(height: 16),
               Text(
@@ -312,7 +325,7 @@ class HomePageContent extends StatelessWidget {
               ),
               SizedBox(height: 16),
             ],
-          )
+          )*/
         ],
       ),
     );

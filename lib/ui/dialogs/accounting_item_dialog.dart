@@ -88,7 +88,7 @@ class _AccountingItemDialogState extends State<AccountingItemDialog> {
                 final count = _countController.text.trim();
                 if(count.isNotEmpty){
                   final item = appBloc.materialsList.firstWhere((element) => element.key == material.value);
-                  if(int.parse(count) <= item.allCount!){
+                  if(int.parse(count) <= item.leftCount!){
                     Navigator.pop(context);
                     final newItem = AccountingItem(
                       stockKey: stock.value,

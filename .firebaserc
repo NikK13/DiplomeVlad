@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "diplomevlad"
-  }
+  },
+  "targets": {
+    "diplomevlad": {
+      "hosting": {
+        "belstroy": [
+          "belstroy"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

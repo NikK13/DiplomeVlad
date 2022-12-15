@@ -4,8 +4,10 @@ import 'package:vlad_diplome/data/model/employee.dart';
 import 'package:vlad_diplome/data/model/material_item.dart';
 import 'package:vlad_diplome/data/model/stock.dart';
 import 'package:vlad_diplome/data/utils/extensions.dart';
+import 'package:vlad_diplome/data/utils/styles.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/dialogs/accounting_item_dialog.dart';
+import 'package:vlad_diplome/ui/dialogs/left_count_dialog.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/loading.dart';
 
@@ -43,6 +45,16 @@ class _MaterialsAccountingPageState extends State<MaterialsAccountingPage> {
                         showCustomDialog(context, const AccountingItemDialog());
                       }
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: (){
+                      showCustomDialog(context, const LeftCountDialog());
+                    },
+                    child: const Text(
+                      "Рассчитать остаток",
+                      style: TextStyle(color: appColor),
+                    )
                   ),
                   const SizedBox(height: 24),
                   childTable(snapshot.data!),
