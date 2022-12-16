@@ -33,7 +33,7 @@ class _InputFieldState extends State<InputField> {
     return GestureDetector(
       onTap: widget.onTap != null ? () => widget.onTap!() : null,
       child: TextField(
-        enabled: widget.onTap == null,
+        enabled: widget.isEnabled,
         controller: widget.controller,
         keyboardType: widget.inputType,
         cursorColor: appColor,

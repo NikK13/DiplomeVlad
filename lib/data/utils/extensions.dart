@@ -169,7 +169,7 @@ Widget tableCell(String data, {bool isTitle = false}) =>
             FontWeight.bold :
             FontWeight.normal
           ),
-          maxLines: 1,
+          maxLines: 3,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
         ),

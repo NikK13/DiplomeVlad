@@ -72,27 +72,30 @@ class _VendorsListPageState extends State<VendorsListPage> {
         color: Colors.grey.shade800,
         width: 1.5
       ),
-      columnWidths: const {
-        0: FlexColumnWidth(2),
-        1: FlexColumnWidth(6),
-        //2: FlexColumnWidth(2),
+      columnWidths: {
+        0: const FlexColumnWidth(2),
+        1: const FlexColumnWidth(6),
+        if(isAsAdministrator)
+        2: const FlexColumnWidth(1),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: items.asMap().map((index, item){
         return MapEntry(index, TableRow(children: [
           tableCell((index + 1).toString(), isTitle: false),
           tableCell(item.name!, isTitle: false),
-         /* IconButton(
-            onPressed: () async{
-              //await appBloc.deleteMaterialType(item.key!);
+          if(isAsAdministrator)
+          IconButton(
+            onPressed: (){
+              showCustomDialog(context, NewVendorDialog(vendorItem: item));
             },
-            icon: const Icon(Icons.delete, color: Colors.white)
-          ),*/
+            icon: Icon(Icons.edit, color: Colors.grey.shade600)
+          ),
         ]));
       }).values.toList()..insert(0, TableRow(children: [
         tableCell("", isTitle: true),
         tableCell("Наименование", isTitle: true),
-        //tableCell("", isTitle: true),
+        if(isAsAdministrator)
+        tableCell("", isTitle: true),
       ])),
     );
   }

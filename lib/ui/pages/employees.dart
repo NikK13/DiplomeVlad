@@ -85,7 +85,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                     value: 1,
                     child: Row(
                       children: const [
-                        Icon(Icons.edit, color: Colors.white),
+                        Icon(Icons.edit, color: Colors.black),
                         SizedBox(
                           width: 6,
                         ),
@@ -98,7 +98,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
                     value: 2,
                     child: Row(
                       children: const [
-                        Icon(Icons.delete_outline, color: Colors.white),
+                        Icon(Icons.delete_outline, color: Colors.black),
                         SizedBox(
                           width: 6,
                         ),

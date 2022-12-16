@@ -10,7 +10,9 @@ import 'package:vlad_diplome/ui/widgets/dropdown.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 
 class AccountingItemDialog extends StatefulWidget {
-  const AccountingItemDialog({Key? key}) : super(key: key);
+  final AccountingItem? accountingItem;
+
+  const AccountingItemDialog({Key? key, this.accountingItem}) : super(key: key);
 
   @override
   State<AccountingItemDialog> createState() => _AccountingItemDialogState();
@@ -33,8 +35,15 @@ class _AccountingItemDialogState extends State<AccountingItemDialog> {
     for(var item in appBloc.materialsList){
       listMaterials.add(ListItem(item.name!, item.key!));
     }
-    material = listMaterials.first;
-    stock = listStocks.first;
+    if(widget.accountingItem == null){
+      material = listMaterials.first;
+      stock = listStocks.first;
+    }
+    else{
+      material = listMaterials.firstWhere((element) => element.value == widget.accountingItem!.materialKey);
+      stock = listStocks.firstWhere((element) => element.value == widget.accountingItem!.stockKey);
+      _countController.text = widget.accountingItem!.count.toString();
+    }
     super.initState();
   }
 
@@ -83,7 +92,8 @@ class _AccountingItemDialogState extends State<AccountingItemDialog> {
             ),
             const SizedBox(height: 16),
             AppButton(
-              text: "Добавить",
+              text: widget.accountingItem == null ?
+              "Добавить" : "Сохранить",
               onPressed: () async{
                 final count = _countController.text.trim();
                 if(count.isNotEmpty){
@@ -97,8 +107,14 @@ class _AccountingItemDialogState extends State<AccountingItemDialog> {
                       employeeKey: firebaseBloc.fbUser!.uid,
                       count: int.parse(count)
                     );
-                    await appBloc.createAccounting(newItem);
-                    await appBloc.updateMaterialLeftCount(material.value, item.allCount! - int.parse(count));
+                    if(widget.accountingItem == null){
+                      await appBloc.createAccounting(newItem);
+                      await appBloc.updateMaterialLeftCount(material.value, item.leftCount! - int.parse(count));
+                    }
+                    else{
+                      await appBloc.updateAccounting(newItem, widget.accountingItem!.key!);
+                      await appBloc.updateMaterialLeftCount(material.value, item.leftCount! + widget.accountingItem!.count! - int.parse(count));
+                    }
                     await appBloc.callAccountingStreams();
                     await appBloc.callMaterialsStream();
                   }

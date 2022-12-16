@@ -6,7 +6,9 @@ import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 
 class NewVendorDialog extends StatefulWidget {
-  const NewVendorDialog({Key? key}) : super(key: key);
+  final VendorItem? vendorItem;
+
+  const NewVendorDialog({Key? key, this.vendorItem}) : super(key: key);
 
   @override
   State<NewVendorDialog> createState() => _NewVendorDialogState();
@@ -14,6 +16,14 @@ class NewVendorDialog extends StatefulWidget {
 
 class _NewVendorDialogState extends State<NewVendorDialog> {
   final _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.vendorItem != null){
+      _nameController.text = widget.vendorItem!.name!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +40,23 @@ class _NewVendorDialogState extends State<NewVendorDialog> {
             ),
             const SizedBox(height: 16),
             AppButton(
-              text: "Добавить",
+              text: widget.vendorItem == null ?
+              "Добавить" : "Сохранить",
               onPressed: () async{
                 final name = _nameController.text.trim();
                 if(name.isNotEmpty){
                   Navigator.pop(context);
-                  await appBloc.createVendor(VendorItem(
-                    name: name
-                  ));
+                  if(widget.vendorItem == null){
+                    await appBloc.createVendor(VendorItem(
+                      name: name
+                    ));
+                  }
+                  else{
+                    await appBloc.updateVendor(VendorItem(
+                      name: name
+                    ), widget.vendorItem!.key!);
+                    appBloc.callMaterialsStream();
+                  }
                   await appBloc.callVendorsStreams();
                 }
                 else{

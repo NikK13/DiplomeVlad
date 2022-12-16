@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:vlad_diplome/data/model/employee.dart';
+import 'package:vlad_diplome/data/model/material_types.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 
 class NewMaterialTypeDialog extends StatefulWidget {
-  const NewMaterialTypeDialog({Key? key}) : super(key: key);
+  final MaterialsTypes? materialsType;
+
+  const NewMaterialTypeDialog({Key? key, this.materialsType}) : super(key: key);
 
   @override
   State<NewMaterialTypeDialog> createState() => _NewMaterialTypeDialogState();
@@ -14,6 +16,14 @@ class NewMaterialTypeDialog extends StatefulWidget {
 
 class _NewMaterialTypeDialogState extends State<NewMaterialTypeDialog> {
   final _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.materialsType != null){
+      _nameController.text = widget.materialsType!.name!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +40,20 @@ class _NewMaterialTypeDialogState extends State<NewMaterialTypeDialog> {
             ),
             const SizedBox(height: 16),
             AppButton(
-                text: "Добавить",
+                text: widget.materialsType == null ?
+                "Добавить" : "Сохранить",
                 onPressed: () async{
                   final name = _nameController.text.trim();
                   if(name.isNotEmpty){
                     Navigator.pop(context);
-                    await appBloc.createMaterialsType(name);
+                    if(widget.materialsType == null){
+                      await appBloc.createMaterialsType(name);
+                    }
+                    else{
+                      await appBloc.updateMaterialsType(MaterialsTypes(
+                        name: name
+                      ), widget.materialsType!.key!);
+                    }
                     await appBloc.callMaterialsTypesStreams();
                   }
                   else{

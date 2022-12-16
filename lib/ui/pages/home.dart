@@ -30,6 +30,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     if(isAsAdministrator) setState(() => _isLoading = false);
+    appBloc.callVendorsStreams();
+    appBloc.callMaterialsTypesStreams();
+    appBloc.callMaterialsStream();
+    appBloc.callEmployeesStream();
+    appBloc.callStocksStreams();
     firebaseBloc.fbAuth.authStateChanges().listen((User? user) async{
       if(user != null){
         if(!isAsAdministrator){
@@ -42,11 +47,6 @@ class _HomePageState extends State<HomePage> {
         }
       }
     });
-    appBloc.callVendorsStreams();
-    appBloc.callMaterialsTypesStreams();
-    appBloc.callMaterialsStream();
-    appBloc.callEmployeesStream();
-    appBloc.callStocksStreams();
     super.initState();
   }
 
@@ -73,14 +73,23 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState(() => _selectedIndex = 0);
                           },
-                          child: const Text(
-                            App.appName,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black
-                            ),
-                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/logo.jpg",
+                                width: 50, height: 50,
+                              ),
+                              const SizedBox(width: 6),
+                              const Text(
+                                App.appName,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.black
+                                ),
+                              ),
+                            ],
+                          )
                         ),
                       ),
                       Row(

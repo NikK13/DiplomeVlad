@@ -13,13 +13,13 @@ class InfoDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("Начальник №1:"),
+            const Text("Заведующий склада №1:"),
             const SizedBox(height: 4),
             const Text("Забелин Андрей Геннадьевич"),
             const SizedBox(height: 4),
             const Text("Телефон: +375 29 111 22 33"),
             const SizedBox(height: 24),
-            const Text("Начальник №2:"),
+            const Text("Заведующий склада №2:"),
             const SizedBox(height: 4),
             const Text("Викторенко Павел Борисович"),
             const SizedBox(height: 4),

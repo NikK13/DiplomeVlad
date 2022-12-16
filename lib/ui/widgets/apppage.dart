@@ -25,7 +25,7 @@ class AppPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: colorDark,
+        backgroundColor: colorLight,
         leading: const SizedBox(),
         automaticallyImplyLeading: false,
         //leading: const AutoLeadingButton(),

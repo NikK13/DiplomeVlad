@@ -8,7 +8,9 @@ import 'package:vlad_diplome/ui/widgets/dropdown.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 
 class NewMaterialDialog extends StatefulWidget {
-  const NewMaterialDialog({Key? key}) : super(key: key);
+  final MaterialItem? materialItem;
+
+  const NewMaterialDialog({Key? key, this.materialItem}) : super(key: key);
 
   @override
   State<NewMaterialDialog> createState() => _NewMaterialDialogState();
@@ -33,8 +35,19 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
     for(var item in appBloc.vendorsList){
       listVendors.add(ListItem(item.name!, item.key!));
     }
-    materialType = listItem.first;
-    vendorItem = listVendors.first;
+    if(widget.materialItem == null){
+      materialType = listItem.first;
+      vendorItem = listVendors.first;
+    }
+    else{
+      materialType = listItem.firstWhere((element) => element.value == widget.materialItem!.type!);
+      vendorItem = listVendors.firstWhere((element) => element.value == widget.materialItem!.vendor!);
+
+      _nameController.text = widget.materialItem!.name!;
+      _descController.text = widget.materialItem!.desc!;
+      _countController.text = widget.materialItem!.allCount!.toString();
+      _priceController.text = widget.materialItem!.pricePerItem!.toString();
+    }
     super.initState();
   }
 
@@ -86,6 +99,7 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
               children: [
                 Expanded(
                   child: InputField(
+                    isEnabled: widget.materialItem == null,
                     hint: "Количество",
                     controller: _countController,
                   ),
@@ -106,7 +120,8 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
             ),
             const SizedBox(height: 16),
             AppButton(
-              text: "Добавить",
+              text: widget.materialItem == null ?
+              "Добавить" : "Сохранить",
               onPressed: () async{
                 final name = _nameController.text.trim();
                 final desc = _descController.text.trim();
@@ -122,7 +137,12 @@ class _NewMaterialDialogState extends State<NewMaterialDialog> {
                     allCount: int.tryParse(count) ?? 0,
                     pricePerItem: double.tryParse(price) ?? 0.0
                   );
-                  await appBloc.createMaterial(item);
+                  if(widget.materialItem == null){
+                    await appBloc.createMaterial(item);
+                  }
+                  else{
+                    await appBloc.updateMaterial(item, widget.materialItem!.key!);
+                  }
                   await appBloc.callMaterialsStream();
                 }
                 else{

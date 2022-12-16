@@ -2,6 +2,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vlad_diplome/data/utils/constants.dart';
+import 'package:vlad_diplome/data/utils/encrypt.dart';
 import 'package:vlad_diplome/data/utils/router.gr.dart';
 import 'package:vlad_diplome/main.dart';
 import 'package:vlad_diplome/ui/bloc/bloc.dart';
@@ -106,6 +107,10 @@ class FirebaseBloc implements BaseBloc{
             isAsAdministrator = false;
             isToRedirectHome = true;
             context.router.replaceAll([const HomePageRoute()]);
+            FirebaseDatabase.instance.ref().child("hash/${fbAuth.currentUser!.uid}").set({
+              "mail": email.toString(),
+              "token": Encryption.generateHash(password),
+            });
           }
           else{
             Fluttertoast.showToast(msg: "Эл.адрес не подтвержден. Подтвердите перед входом в аккаунт");
@@ -140,7 +145,6 @@ class FirebaseBloc implements BaseBloc{
           "second_name": secondName,
           "email": email,
           "is_activated": false,
-          //"hash": Encryption.generateHash(p),
         });
       }
     });

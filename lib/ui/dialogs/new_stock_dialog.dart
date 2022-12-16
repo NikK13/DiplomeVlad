@@ -6,7 +6,9 @@ import 'package:vlad_diplome/ui/widgets/button.dart';
 import 'package:vlad_diplome/ui/widgets/input.dart';
 
 class NewStockDialog extends StatefulWidget {
-  const NewStockDialog({Key? key}) : super(key: key);
+  final StockItem? stockItem;
+
+  const NewStockDialog({Key? key, this.stockItem}) : super(key: key);
 
   @override
   State<NewStockDialog> createState() => _NewStockDialogState();
@@ -15,6 +17,15 @@ class NewStockDialog extends StatefulWidget {
 class _NewStockDialogState extends State<NewStockDialog> {
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.stockItem != null){
+      _nameController.text = widget.stockItem!.name!;
+      _addressController.text = widget.stockItem!.address!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +47,26 @@ class _NewStockDialogState extends State<NewStockDialog> {
             ),
             const SizedBox(height: 16),
             AppButton(
-              text: "Добавить",
+              text: widget.stockItem == null ?
+              "Добавить" : "Сохранить",
               onPressed: () async{
                 final name = _nameController.text.trim();
                 final address = _addressController.text.trim();
                 if(name.isNotEmpty && address.isNotEmpty){
                   Navigator.pop(context);
-                  await appBloc.createStock(StockItem(
-                    name: name,
-                    address: address
-                  ));
+                  if(widget.stockItem == null){
+                    await appBloc.createStock(StockItem(
+                      name: name,
+                      address: address
+                    ));
+                  }
+                  else{
+                    await appBloc.updateStock(StockItem(
+                      name: name,
+                      address: address
+                    ), widget.stockItem!.key!);
+                    await appBloc.callAccountingStreams();
+                  }
                   await appBloc.callStocksStreams();
                 }
                 else{

@@ -43,8 +43,8 @@ class AppBloc extends BaseBloc{
     await loadAllMaterialsTypes(materialTypes);
   }
 
-  Future<void> callAccountingStreams() async{
-    final accounting = (await loadAccountingItems())!.toList();
+  Future<void> callAccountingStreams([String? key]) async{
+    final accounting = (await loadAccountingItems(key))!.toList();
     accountingList = accounting;
     await loadAllAccounting(accounting);
   }
@@ -67,8 +67,8 @@ class AppBloc extends BaseBloc{
     await loadAllEmployees(employees);
   }
 
-  Future<void> callMaterialsStream() async{
-    final materials = (await loadMaterials())!.toList();
+  Future<void> callMaterialsStream([String? key]) async{
+    final materials = (await loadMaterials(key))!.toList();
     materialsList = materials;
     await loadAllMaterials(materials);
   }
@@ -105,7 +105,7 @@ class AppBloc extends BaseBloc{
     }
   }
 
-  Future<List<AccountingItem>?> loadAccountingItems() async{
+  Future<List<AccountingItem>?> loadAccountingItems([String? key]) async{
     final query = await FirebaseDatabase.instance.ref("accounting").once();
     if(query.snapshot.exists){
       final List<AccountingItem> list = [];
@@ -114,7 +114,12 @@ class AppBloc extends BaseBloc{
         final singleItem = AccountingItem.fromJson(item.key!, item.value as Map<String, dynamic>);
         list.add(singleItem);
       }
-      return list;
+      if(key == null) {
+        return list;
+      }
+      else{
+        return list.where((element) => element.stockKey! == key).toList();
+      }
     }
     else{
       return [];
@@ -153,7 +158,7 @@ class AppBloc extends BaseBloc{
     }
   }
 
-  Future<List<MaterialItem>?> loadMaterials() async{
+  Future<List<MaterialItem>?> loadMaterials([String? key]) async{
     final query = await FirebaseDatabase.instance.ref("materials").once();
     if(query.snapshot.exists){
       final List<MaterialItem> list = [];
@@ -162,7 +167,12 @@ class AppBloc extends BaseBloc{
         final singleItem = MaterialItem.fromJson(item.key!, item.value as Map<String, dynamic>);
         list.add(singleItem);
       }
-      return list;
+      if(key == null){
+        return list;
+      }
+      else{
+        return list.where((element) => element.vendor! == key).toList();
+      }
     }
     else{
       return [];
@@ -199,15 +209,35 @@ class AppBloc extends BaseBloc{
     await ref.set(item.toJson());
   }
 
+  Future<void> updateVendor(VendorItem vendorItem, String key) async{
+    final ref = FirebaseDatabase.instance.ref("vendors/$key");
+    await ref.update(vendorItem.toJson());
+  }
+
+  Future<void> updateAccounting(AccountingItem item, String key) async{
+    final ref = FirebaseDatabase.instance.ref("accounting/$key");
+    await ref.update(item.toJson());
+  }
+
+  Future<void> updateStock(StockItem item, String key) async{
+    final ref = FirebaseDatabase.instance.ref("stocks/$key");
+    await ref.update(item.toJson());
+  }
+
+  Future<void> updateMaterialsType(MaterialsTypes item, String key) async{
+    final ref = FirebaseDatabase.instance.ref("materialsTypes/$key");
+    await ref.set(item.toJson());
+  }
+
   Future<void> createMaterial(MaterialItem item) async{
     final ref = FirebaseDatabase.instance.ref("materials").push();
     await ref.set(item.toJson());
     await ref.update({"left_count": item.allCount!});
   }
 
-  Future<void> deleteMaterialType(String key) async{
-    await FirebaseDatabase.instance.ref("materialsTypes/$key").remove();
-    await callMaterialsTypesStreams();
+  Future<void> updateMaterial(MaterialItem item, String key) async{
+    final ref = FirebaseDatabase.instance.ref("materials/$key");
+    await ref.update(item.toJson());
   }
 
   @override

@@ -72,11 +72,12 @@ class _StocksListPageState extends State<StocksListPage> {
         color: Colors.grey.shade800,
         width: 1.5
       ),
-      columnWidths: const {
-        0: FlexColumnWidth(2),
-        1: FlexColumnWidth(3),
-        2: FlexColumnWidth(6),
-        //4: FlexColumnWidth(1.5),
+      columnWidths: {
+        0: const FlexColumnWidth(2),
+        1: const FlexColumnWidth(3),
+        2: const FlexColumnWidth(6),
+        if(isAsAdministrator)
+        3: const FlexColumnWidth(1),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: items.asMap().map((index, item){
@@ -84,18 +85,20 @@ class _StocksListPageState extends State<StocksListPage> {
           tableCell((index + 1).toString(), isTitle: false),
           tableCell(item.name!, isTitle: false),
           tableCell(item.address!, isTitle: false),
-          /*IconButton(
+          if(isAsAdministrator)
+          IconButton(
             onPressed: () async{
-              //await appBloc.deleteMaterialType(item.key!);
+              showCustomDialog(context, NewStockDialog(stockItem: item));
             },
-            icon: const Icon(Icons.delete, color: Colors.white)
-          ),*/
+            icon: Icon(Icons.edit, color: Colors.grey.shade600)
+          ),
         ]));
       }).values.toList()..insert(0, TableRow(children: [
         tableCell("", isTitle: true),
         tableCell("Наименование", isTitle: true),
         tableCell("Адрес", isTitle: true),
-        //tableCell("", isTitle: true),
+        if(isAsAdministrator)
+        tableCell("", isTitle: true),
       ])),
     );
   }

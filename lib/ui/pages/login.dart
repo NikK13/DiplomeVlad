@@ -62,15 +62,12 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(height: 8),
-                        const Text(
-                          App.appName,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2
-                          ),
+                        Image.asset(
+                          "assets/logo.jpg",
+                          width: 150, height: 150,
+                          fit: BoxFit.cover,
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 12),
                         if(_isForSignUp)
                         Column(
                           children: [
